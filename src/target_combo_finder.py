@@ -216,9 +216,9 @@ def main():
     #设置decimal的精度为50位小数，确保17位小数计算准确
     decimal.getcontext().prec = 50
 
-    print("=" * 60)
+    print("=" * 40)
     print("磨损组合计算程序")
-    print("=" * 60)
+    print("=" * 40)
 
     #1.输入材料的最小/最大磨损值
     print("\n【第一步】请输入材料磨损范围：")
@@ -283,9 +283,9 @@ def main():
     matched_combinations.sort(key=lambda x: x["total_price"])
 
     #9.输出前10个价格最低的组合
-    print(f"\n" + "=" * 60)
+    print(f"\n" + "=" * 40)
     print(f"前10个价格最低的组合（按总价格升序）：")
-    print("=" * 60)
+    print("=" * 40)
 
     for i, result in enumerate(matched_combinations[:10], 1):       #enumerate用于将一个可迭代对象组合为一个索引序列，用于在循环中同时获取索引和元素值
                                 #取前十个组合
