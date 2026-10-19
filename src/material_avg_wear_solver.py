@@ -1,4 +1,4 @@
-from decimal import Decimal, getcontext
+from decimal import Decimal, getcontext, InvalidOperation
 
 #设置精度为50位，确保17位小数运算无误差
 getcontext().prec = 50
@@ -21,8 +21,15 @@ try:
     #输出结果并强制保留17位小数
     print(f"\n计算得到的材料平均磨损为: {x:.17f}")
     input("\n按Enter结束")
+
 except ZeroDivisionError as e:
     print(f"错误: {e}")
+
+except InvalidOperation:
+    print("错误: 输入不是有效的数字")
+
+except EOFError:
+    print("\n输入已中断")
 
 except KeyboardInterrupt:
     print("\n程序被用户中断")

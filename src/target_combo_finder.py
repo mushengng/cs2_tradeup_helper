@@ -67,6 +67,7 @@ def get_int_input(prompt, min_val = 1, max_val = 17):
         except ValueError:      #通用异常类，触发场景是数据类型本身合法，但值不符合该类型的要求或操作的逻辑规则。即上方的转换失败
             print("输入不是有效的整数，请重新输入！")
 
+
 #获取用户输入的材料磨损值和对应价格列表
 def get_material_list(max_materials = 30):
 
@@ -125,6 +126,7 @@ def get_material_list(max_materials = 30):
 
     return materials
 
+
 #将decimal数值截断到指定小数位数
 def truncate_decimal(value, decimal_places):
                 #要截断的十进制数，要保留的小数位数
@@ -133,25 +135,9 @@ def truncate_decimal(value, decimal_places):
         return decimal.Decimal(int(value))      #则直接返回整数部分
 
     factor = decimal.Decimal(10) ** decimal_places      #创建一个因子，若保留的小数位是3，则factor=10的3次方
-    truncated = (value * factor).to_integral_value(rounding=decimal.ROUND_DOWN) / factor
+    truncated = (value * factor).to_integral_value(rounding = decimal.ROUND_DOWN) / factor
                 #先将数字乘因子，这样得到的就是保留小数位扩大到整数部分，再进行向下取整，清除后面的小数位，再除以因子回到正确的数字
     return truncated
-
-
-#计算产物的最终磨损值
-def calculate_product_wear(combo, m_min, m_max, p_min, p_max):
-                    #十个材料的组合（是一个列表），材料最小磨损，材料最大磨损，产物最小磨损，产物最大磨损
-
-    total_normalized = decimal.Decimal('0')     #初始化一个decimal类型的变量，用于累加所有材料的归一化磨损值
-
-    for mat in combo:       #遍历组合（一个列表）中的每个材料（一个字典）
-        normalized = (mat["wear"] - m_min) / (m_max - m_min)        #计算单个材料的归一化磨损
-        total_normalized += normalized      #求和
-
-    avg_normalized = total_normalized / decimal.Decimal('10')       #十个材料的归一化磨损求均值
-    product_wear = p_min + avg_normalized * (p_max - p_min)     #产物磨损计算公式
-
-    return product_wear
 
 
 #搜索所有符合条件的组合
@@ -196,7 +182,7 @@ def find_all_combinations(materials, target_wear, m_min, m_max, p_min, p_max, ma
             total_price = sum(mat["price"] for mat in combo)        #计算该组合的总价
 
             #保持组合内材料的原始顺序（用户输入顺序）
-            sorted_combo = sorted(combo, key=lambda x: x["idx"])        #对从itertools.combinations生成的10个材料组合（combo），按照每个材料的 "idx" 值（用户输入材料时的原始顺序编号）进行升序排序，生成一个新的排序后的列表并赋值给sorted_combo
+            sorted_combo = sorted(combo, key = lambda x: x["idx"])        #对从itertools.combinations生成的10个材料组合（combo），按照每个材料的 "idx" 值（用户输入材料时的原始顺序编号）进行升序排序，生成一个新的排序后的列表并赋值给sorted_combo
                                    #lambda是Python中定义匿名函数的关键字    #即把combo内部的十个字典按照字典里的idx排序
 
             #把符合条件的组合信息添加到结果列表中（161行）
@@ -222,26 +208,26 @@ def main():
 
     #1.输入材料的最小/最大磨损值
     print("\n【第一步】请输入材料磨损范围：")
-    m_min = get_decimal_input("材料最小磨损值：", allow_equal=True)
-    m_max = get_decimal_input("材料最大磨损值：", min_val=m_min, allow_equal=False)
+    m_min = get_decimal_input("材料最小磨损值：", allow_equal = True)
+    m_max = get_decimal_input("材料最大磨损值：", min_val = m_min, allow_equal = False)
 
     #2.输入产物的最小/最大磨损值
     print("\n【第二步】请输入产物磨损范围：")
-    p_min = get_decimal_input("产物最小磨损值：", allow_equal=True)
-    p_max = get_decimal_input("产物最大磨损值：", min_val=p_min, allow_equal=False)
+    p_min = get_decimal_input("产物最小磨损值：", allow_equal = True)
+    p_max = get_decimal_input("产物最大磨损值：", min_val = p_min, allow_equal = False)
 
     #3.输入目标最终磨损值
     print("\n【第三步】请输入目标最终磨损值：")
-    target_wear = get_decimal_input("目标最终磨损值：",min_val=p_min,max_val=p_max,allow_equal=True)
+    target_wear = get_decimal_input("目标最终磨损值：", min_val = p_min, max_val = p_max, allow_equal = True)
 
     #4.输入需要匹配的小数位数
     print("\n【第四步】请输入需要匹配的小数位数：")
-    match_decimals = get_int_input("需要匹配的小数位数（1-17）：", min_val=1, max_val=17)
+    match_decimals = get_int_input("需要匹配的小数位数（1-17）：", min_val = 1, max_val = 17)
     print(f"将按「截断到{match_decimals}位小数」的规则匹配组合！")
 
     #5.输入材料列表
     print("\n【第五步】请输入材料列表（最多30个材料）：")
-    materials = get_material_list(max_materials=30)
+    materials = get_material_list(max_materials = 30)
 
     if not materials:   #材料为空
         return
@@ -280,7 +266,7 @@ def main():
         return
 
     #按总价格升序排序
-    matched_combinations.sort(key=lambda x: x["total_price"])
+    matched_combinations.sort(key = lambda x: x["total_price"])
 
     #9.输出前10个价格最低的组合
     print(f"\n" + "=" * 40)
